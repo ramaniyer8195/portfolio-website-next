@@ -18,10 +18,8 @@ const Home = () => {
               <span className="text-accent">Raman Iyer</span>
             </h1>
             <p className="max-w-[500px] mb-9 text-white/80">
-              I am a versatile software developer specializing in the MERN
-              stack. With robust experience in MongoDB, Express.js, React, and
-              Node.js, I excel in building efficient and scalable web
-              applications.
+              I am a versatile Full Stack Developer specializing in the MERN
+              stack, building efficient, scalable web applications.
             </p>
 
             <div className="flex flex-col xl:flex-row items-center gap-8">
