@@ -23,7 +23,7 @@ const WorkCard = ({ data }: { data: WorkCardData }) => {
             })}
           </ul>
           <div className="border border-white/20" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-[30px]">
             <WorkCardLink
               data={{
                 type: LinkType.LIVE,
