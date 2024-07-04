@@ -29,6 +29,14 @@ const links = [
 const Nav = () => {
   const pathname = usePathname();
 
+  const getActivePath = (path: string): boolean => {
+    if (path === "/blog") {
+      return /^\/blog*/.test(pathname);
+    } else {
+      return path === pathname;
+    }
+  };
+
   return (
     <nav className="flex gap-8">
       {links.map(({ name, path }, index) => (
@@ -36,7 +44,7 @@ const Nav = () => {
           key={index}
           href={path}
           className={`${
-            path === pathname && "text-accent border-b-2 border-accent"
+            getActivePath(path) && "text-accent border-b-2 border-accent"
           } capitalize font-medium hover:text-accent transition-all`}
         >
           {name}
