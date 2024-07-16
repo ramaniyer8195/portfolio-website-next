@@ -80,7 +80,7 @@ const education: Education = {
   items: [
     {
       instituion: "IIT Kanpur",
-      degree: "Certification course in AIML",
+      degree: "Professional Certification in AIML",
       duration: "2023 - 2024",
     },
     {

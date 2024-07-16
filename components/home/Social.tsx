@@ -15,6 +15,7 @@ const socials = [
   { icon: <FaXTwitter />, path: "https://x.com/RamanIyer8195" },
   { icon: <FaFacebookF />, path: "https://www.facebook.com/ramaniyer08" },
   { icon: <FaInstagram />, path: "https://www.instagram.com/raman_0801/" },
+  { icon: <FaWhatsapp />, path: "https://wa.me/919819289445" },
 ];
 
 const Social = ({
