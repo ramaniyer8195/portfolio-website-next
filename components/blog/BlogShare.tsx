@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import {
   FaFacebookF,
-  FaInstagram,
   FaLinkedinIn,
   FaWhatsapp,
-  FaGithub,
+  FaRedditAlien,
+  FaHackerNews,
+  FaLink,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import {
@@ -13,56 +16,77 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useEffect, useState } from "react";
 
 const socials = [
   {
-    tooltip: "Github",
-    icon: <FaGithub />,
-    path: "https://github.com/ramaniyer8195",
-  },
-  {
     tooltip: "LinkedIn",
     icon: <FaLinkedinIn />,
-    path: "https://www.linkedin.com/in/raman-iyer/",
+    path: "https://www.linkedin.com/shareArticle?url=",
   },
   {
     tooltip: "Twitter",
     icon: <FaXTwitter />,
-    path: "https://x.com/RamanIyer8195",
+    path: "https://twitter.com/intent/post?url=",
   },
   {
     tooltip: "Facebook",
     icon: <FaFacebookF />,
-    path: "https://www.facebook.com/ramaniyer08",
+    path: "https://www.facebook.com/sharer/sharer.php?u=",
   },
   {
-    tooltip: "Instagram",
-    icon: <FaInstagram />,
-    path: "https://www.instagram.com/raman_0801/",
+    tooltip: "Reddit",
+    icon: <FaRedditAlien />,
+    path: "https://reddit.com/submit?url=",
   },
   {
     tooltip: "Whatsapp",
     icon: <FaWhatsapp />,
-    path: "https://wa.me/919819289445",
+    path: "https://wa.me/?text=",
+  },
+  {
+    tooltip: "Hacker News",
+    icon: <FaHackerNews />,
+    path: "https://news.ycombinator.com/submitlink?u=",
   },
 ];
 
-const Social = ({
+const BlogShare = ({
   containerStyles,
   iconStyles,
 }: {
   containerStyles: string;
   iconStyles: string;
 }) => {
+  const [blogUrl, setBlogUrl] = useState("");
+
+  useEffect(() => {
+    setBlogUrl(window.location.href);
+  }, []);
+
   return (
     <div className={containerStyles}>
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger>
+            <div
+              className={iconStyles}
+              onClick={() => navigator.clipboard.writeText(blogUrl)}
+            >
+              {<FaLink />}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="capitalize">Copy Link</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       {socials.map(({ tooltip, icon, path }, index) => (
         <TooltipProvider delayDuration={100} key={index}>
           <Tooltip>
             <TooltipTrigger>
               <Link
-                key={index}
-                href={path}
+                href={`${path}${blogUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={iconStyles}
@@ -80,4 +104,4 @@ const Social = ({
   );
 };
 
-export default Social;
+export default BlogShare;
