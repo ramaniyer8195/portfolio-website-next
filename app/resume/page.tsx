@@ -44,7 +44,6 @@ const about: About = {
 };
 
 const experience: Experience = {
-  icon: "/assets/resume/badge.svg",
   title: "My experience",
   description:
     "Explore my 8+ years of experience delivering high-quality, scalable web applications across diverse roles.",
@@ -73,7 +72,6 @@ const experience: Experience = {
 };
 
 const education: Education = {
-  icon: "/assets/resume/cap.svg",
   title: "My education",
   description:
     "Explore my educational background and qualifications that underpin my career in web development.",
