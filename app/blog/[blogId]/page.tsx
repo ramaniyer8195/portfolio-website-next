@@ -11,6 +11,8 @@ import BlogCard from "@/components/blog/BlogCard";
 import NewsLetter from "@/components/blog/NewsLetter";
 import Link from "next/link";
 import BlogShare from "@/components/blog/BlogShare";
+import { FaBookOpen, FaUser } from "react-icons/fa";
+import { BsCalendar2DateFill } from "react-icons/bs";
 
 const BlogDetails = ({ params }: { params: { blogId: string } }) => {
   const [blogDetails, setBlogDetails] = useState<BlogItem>();
@@ -24,7 +26,16 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
     setBlogDetails(BLOGS.find((blog) => blog.id === params.blogId));
   }, []);
 
-  return (
+  const getDisplayDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
+
+  return blogDetails ? (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{
@@ -35,20 +46,34 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
     >
       <div className="container mx-auto">
         <div className="w-full">
+          <h2 className="text-[42px] font-extrabold leading-none mb-6">
+            {blogDetails.title}
+          </h2>
+          <div className="flex gap-6 mb-3">
+            <div className="flex gap-3 items-center">
+              <FaUser /> {blogDetails.author}
+            </div>
+            <div className="w-[2px] bg-white"></div>
+            <div className="flex gap-3 items-center">
+              <BsCalendar2DateFill /> {getDisplayDate(blogDetails.publishedAt)}
+            </div>
+            <div className="w-[2px] bg-white"></div>
+            <div className="flex gap-3 items-center">
+              <FaBookOpen />{" "}
+              {`${(blogDetails.content.length / 2400).toFixed(0)} min read`}
+            </div>
+          </div>
           <div className="h-[600px] relative group justify-center items-center bg-pink-50/20 mb-8">
             <div className="relative w-full h-full">
               <Image
-                src={blogDetails?.img || ""}
-                alt={blogDetails?.title || ""}
+                src={blogDetails.img || ""}
+                alt={blogDetails.title || ""}
                 fill
                 className="object-cover"
               />
             </div>
           </div>
-          <h2 className="text-[42px] font-extrabold leading-none mb-6">
-            {blogDetails?.title}
-          </h2>
-          <BlogContent data={DUMMY_BLOG} />
+          <BlogContent data={blogDetails.content} />
           <hr className="my-10 border-accent border-[1px]" />
           <div className="flex flex-col gap-6 items-center my-10">
             <h2 className="text-4xl">Share</h2>
@@ -72,6 +97,8 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
         </div>
       </div>
     </motion.div>
+  ) : (
+    <></>
   );
 };
 

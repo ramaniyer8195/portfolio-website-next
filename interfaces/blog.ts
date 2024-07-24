@@ -3,6 +3,7 @@ export interface BlogItem {
   img: string;
   title: string;
   desc: string;
+  content: string;
   author: string;
   publishedAt: Date;
 }
