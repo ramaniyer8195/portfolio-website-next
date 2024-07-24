@@ -1,5 +1,4 @@
 export interface Experience {
-  icon: string;
   title: string;
   description: string;
   items: {
@@ -10,7 +9,6 @@ export interface Experience {
 }
 
 export interface Education {
-  icon: string;
   title: string;
   description: string;
   items: {

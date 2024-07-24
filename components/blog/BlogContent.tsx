@@ -1,4 +1,4 @@
-import Markdown, { ExtraProps } from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
@@ -24,7 +24,7 @@ import {
   Th,
   Thead,
   Ul,
-} from "@/constants/BlogComponents";
+} from "@/components/blog/BlogComponents";
 
 const BlogContent = ({ data }: { data: string }) => {
   const regex = /!\[(.*)\]\((.*)\salign=".*?"\)/gi;

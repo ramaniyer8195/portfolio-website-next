@@ -5,29 +5,7 @@ import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { CiMenuFries } from "react-icons/ci";
 import { Button } from "../ui/button";
-
-const links = [
-  {
-    name: "home",
-    path: "/",
-  },
-  {
-    name: "resume",
-    path: "/resume",
-  },
-  {
-    name: "work",
-    path: "/work",
-  },
-  {
-    name: "blog",
-    path: "/blog",
-  },
-  {
-    name: "contact",
-    path: "/contact",
-  },
-];
+import { links } from "@/constants/data";
 
 const MobileNav = () => {
   const pathname = usePathname();
@@ -56,7 +34,7 @@ const MobileNav = () => {
               {name}
             </Link>
           ))}
-          <Link href="/contact">
+          <Link href="https://buymeacoffee.com/ramaniyer" target="_blank">
             <Button>Buy Me Coffee</Button>
           </Link>
         </nav>
