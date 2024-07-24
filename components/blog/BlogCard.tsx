@@ -2,13 +2,6 @@ import { BlogItem } from "@/interfaces/blog";
 import React from "react";
 import BlogCardImage from "./BlogCardImage";
 import Link from "next/link";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipContent,
-  TooltipTrigger,
-} from "../ui/tooltip";
-import { MdReadMore } from "react-icons/md";
 
 const BlogCard = ({ data }: { data: BlogItem }) => {
   return (

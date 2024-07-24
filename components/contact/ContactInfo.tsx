@@ -1,23 +1,5 @@
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import Social from "../home/Social";
-
-const info = [
-  {
-    icon: <FaPhoneAlt />,
-    title: "Phone",
-    description: "+919819289445",
-  },
-  {
-    icon: <FaEnvelope />,
-    title: "Email",
-    description: "ramaniyer8195@gmail.com",
-  },
-  {
-    icon: <FaMapMarkerAlt />,
-    title: "Address",
-    description: "Mumbai, India",
-  },
-];
+import { info } from "@/constants/data";
 
 const ContactInfo = () => {
   return (
