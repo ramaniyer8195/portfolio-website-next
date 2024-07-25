@@ -17,8 +17,8 @@ const BlogCard = ({ data }: { data: BlogItem }) => {
           <h3 className="text-2xl font-bold text-white capitalize">
             {data.title}
           </h3>
-          <p className="text-white/60">{data.desc}</p>
-          <Link href={`/blog/${data.id}`} id={data.id}>
+          <p className="text-white/60 line-clamp-3">{data.desc}</p>
+          <Link href={`/blog/${data.slug}`} id={data.id}>
             <span className="text-accent">Read More</span>
           </Link>
         </div>

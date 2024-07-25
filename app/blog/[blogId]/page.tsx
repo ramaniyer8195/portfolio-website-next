@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { BlogItem } from "@/interfaces/blog";
-import { BLOGS, DUMMY_BLOG } from "@/constants/data";
+import { BLOGS } from "@/constants/data";
 import BlogContent from "@/components/blog/BlogContent";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import BlogCard from "@/components/blog/BlogCard";
 import NewsLetter from "@/components/blog/NewsLetter";
@@ -23,27 +22,21 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
   }, []);
 
   useEffect(() => {
-    setBlogDetails(BLOGS.find((blog) => blog.id === params.blogId));
+    setBlogDetails(BLOGS[0]);
   }, []);
 
-  const getDisplayDate = (date: Date) => {
+  const getDisplayDate = (date: string) => {
+    const parsedDate = new Date(date);
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "long",
       day: "numeric",
     };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
+    return new Intl.DateTimeFormat("en-US", options).format(parsedDate);
   };
 
   return blogDetails ? (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 1,
-        transition: { delay: 2.4, duration: 0.4, ease: "easeIn" },
-      }}
-      className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0"
-    >
+    <div className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0">
       <div className="container mx-auto">
         <div className="w-full">
           <h2 className="text-[42px] font-extrabold leading-none mb-6">
@@ -59,8 +52,7 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
             </div>
             <div className="w-[2px] bg-white"></div>
             <div className="flex gap-3 items-center">
-              <FaBookOpen />{" "}
-              {`${(blogDetails.content.length / 2400).toFixed(0)} min read`}
+              <FaBookOpen /> {`${blogDetails.readTime} min read`}
             </div>
           </div>
           <div className="h-[600px] relative group justify-center items-center bg-pink-50/20 mb-8">
@@ -96,7 +88,7 @@ const BlogDetails = ({ params }: { params: { blogId: string } }) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   ) : (
     <></>
   );
