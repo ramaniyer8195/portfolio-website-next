@@ -9,11 +9,12 @@ import { Button } from "../ui/button";
 const Posts = () => {
   const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: ["blogs"],
-    queryFn: getPosts,
+    queryFn: (args) => getPosts({ first: 10, ...args }),
     getNextPageParam: (lastPage) =>
-      lastPage.length < 3 ? undefined : lastPage[lastPage.length - 1].cursor,
+      lastPage.length < 10 ? undefined : lastPage[lastPage.length - 1].cursor,
     initialPageParam: "",
   });
+
   return (
     <div>
       <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-8">

@@ -16,6 +16,7 @@ export type PostMetadata = {
   };
   publishedAt: string;
   readTimeInMinutes: number;
+  series: { name: string; slug: string };
 };
 
 export type GetPostsResponse = {
@@ -32,9 +33,6 @@ export type GetPostsResponse = {
 type GetPostsFunctionArgs = {
   first: number;
   pageParam: string;
-  filter: {
-    tags?: string[];
-  };
 };
 
 export type GetPostsArgs = QueryFunctionContext & GetPostsFunctionArgs;
@@ -52,5 +50,18 @@ export type SubscribeToNewsletterResponse = {
 export type GetPostBySlugResponse = {
   publication: {
     post: PostMetadata;
+  };
+};
+
+export type GetReadMorePostsResponse = {
+  publication: {
+    series: {
+      posts: {
+        edges: {
+          node: PostMetadata;
+          cursor: string;
+        }[];
+      };
+    };
   };
 };

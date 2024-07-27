@@ -12,9 +12,9 @@ const Blog = async () => {
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["blogs"],
-    queryFn: getPosts,
+    queryFn: (args) => getPosts({ first: 10, ...args }),
     getNextPageParam: (lastPage: BlogItem[]) =>
-      lastPage.length < 3 ? undefined : lastPage[lastPage.length - 1].cursor,
+      lastPage.length < 10 ? undefined : lastPage[lastPage.length - 1].cursor,
     initialPageParam: "",
   });
 
