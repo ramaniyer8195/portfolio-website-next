@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { ExtraProps } from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import CodeBlock from "./CodeBlock";
 
 export const H1 = (props: JSX.IntrinsicElements["h1"] & ExtraProps) => {
   const { children } = props;
@@ -33,9 +32,7 @@ export const Code = (props: JSX.IntrinsicElements["code"] & ExtraProps) => {
   const { children, className } = props;
   const match = /language-(\w+)/.exec(className || "");
   return match ? (
-    <SyntaxHighlighter PreTag="div" language={match[1]} style={oneDark}>
-      {String(children).replace(/\n$/, "")}
-    </SyntaxHighlighter>
+    <CodeBlock match={match}>{children}</CodeBlock>
   ) : (
     <code className="bg-[#24292e] rounded p-1">{children}</code>
   );

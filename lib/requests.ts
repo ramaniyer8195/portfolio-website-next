@@ -72,11 +72,14 @@ export const getPosts = async ({
   return blogs;
 };
 
-export const getReadMorePosts = async (
+export const getReadMoreSeriesPosts = async (
   seriesSlug: string
 ): Promise<BlogItem[]> => {
   const query = gql`
-    query getPosts($publicationId: ObjectId!, $seriesSlug: String!) {
+    query getReadMoreSeriesPosts(
+      $publicationId: ObjectId!
+      $seriesSlug: String!
+    ) {
       publication(id: $publicationId) {
         series(slug: $seriesSlug) {
           posts(first: 3) {
@@ -134,9 +137,64 @@ export const getReadMorePosts = async (
   return blogs;
 };
 
+export const getReadMorePosts = async (): Promise<BlogItem[]> => {
+  const query = gql`
+    query getReadMorePosts($publicationId: ObjectId!) {
+      publication(id: $publicationId) {
+        posts(first: 3) {
+          edges {
+            node {
+              id
+              title
+              slug
+              content {
+                text
+                markdown
+              }
+              coverImage {
+                url
+              }
+              author {
+                name
+              }
+              publishedAt
+              readTimeInMinutes
+              series {
+                name
+                slug
+              }
+            }
+            cursor
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await request<GetPostsResponse>(endpoint, query, {
+    publicationId,
+  });
+
+  const blogs: BlogItem[] = response.publication.posts.edges.map((edge) => ({
+    id: edge.node.id,
+    slug: edge.node.slug,
+    img: edge.node.coverImage.url,
+    title: edge.node.title,
+    desc: edge.node.content.text.substring(0, 300),
+    content: edge.node.content.markdown,
+    author: edge.node.author.name,
+    publishedAt: edge.node.publishedAt,
+    readTime: edge.node.readTimeInMinutes,
+    series: edge.node.series?.name || "",
+    cursor: edge.cursor,
+  }));
+
+  return blogs;
+};
+
 export const getPostBySlug = async (slug: string): Promise<BlogDetailsItem> => {
   const query = gql`
-    query getPosts($publicationId: ObjectId!, $slug: String!) {
+    query getPostBySlug($publicationId: ObjectId!, $slug: String!) {
       publication(id: $publicationId) {
         post(slug: $slug) {
           id

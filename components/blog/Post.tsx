@@ -11,7 +11,12 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import BlogCard from "./BlogCard";
 import { useQuery } from "@tanstack/react-query";
-import { getPostBySlug, getReadMorePosts } from "@/lib/requests";
+import {
+  getPostBySlug,
+  getReadMorePosts,
+  getReadMoreSeriesPosts,
+} from "@/lib/requests";
+import { motion } from "framer-motion";
 
 const Post = ({ slug }: { slug: string }) => {
   const { data } = useQuery({
@@ -21,9 +26,14 @@ const Post = ({ slug }: { slug: string }) => {
 
   const series = data?.seriesSlug || "";
 
+  const { data: readMoreSeriesData } = useQuery({
+    queryKey: ["readMoreSeries", series],
+    queryFn: () => getReadMoreSeriesPosts(series),
+  });
+
   const { data: readMoreData } = useQuery({
-    queryKey: ["readMore", series],
-    queryFn: () => getReadMorePosts(series),
+    queryKey: ["readMore"],
+    queryFn: () => getReadMorePosts(),
   });
 
   const getDisplayDate = (date: string) => {
@@ -34,6 +44,19 @@ const Post = ({ slug }: { slug: string }) => {
       day: "numeric",
     };
     return new Intl.DateTimeFormat("en-US", options).format(parsedDate);
+  };
+
+  const getReadMorePostCards = () => {
+    if (readMoreData && readMoreSeriesData) {
+      const data = [...readMoreSeriesData, ...readMoreData];
+
+      return data
+        .filter((blog) => blog.slug !== slug)
+        .slice(0, 2)
+        .map((blog, index) => {
+          return <BlogCard key={index} data={blog} />;
+        });
+    } else return [];
   };
 
   return data ? (
@@ -54,7 +77,14 @@ const Post = ({ slug }: { slug: string }) => {
           <FaBookOpen /> {`${data.readTime} min read`}
         </div>
       </div>
-      <div className="h-[600px] relative group justify-center items-center bg-pink-50/20 mb-8">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: 1,
+          transition: { delay: 1, duration: 0.4, ease: "easeIn" },
+        }}
+        className="h-[600px] relative group justify-center items-center bg-pink-50/20 mb-8"
+      >
         <div className="relative w-full h-full">
           <Image
             src={data.img || ""}
@@ -63,7 +93,7 @@ const Post = ({ slug }: { slug: string }) => {
             className="object-cover"
           />
         </div>
-      </div>
+      </motion.div>
       <BlogContent data={data.content} />
       <hr className="my-10 border-accent border-[1px]" />
       <div className="flex flex-col gap-6 items-center my-10">
@@ -81,12 +111,7 @@ const Post = ({ slug }: { slug: string }) => {
         </Link>
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-8">
-        {readMoreData
-          ?.filter((blog) => blog.slug !== slug)
-          .slice(0, 2)
-          .map((blog, index) => {
-            return <BlogCard key={index} data={blog} />;
-          })}
+        {getReadMorePostCards()}
       </div>
     </>
   ) : (
