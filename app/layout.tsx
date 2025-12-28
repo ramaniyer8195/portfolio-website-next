@@ -17,6 +17,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Code with Raman",
   description: "Portfolio of Raman, a software developer",
+  icons: {
+    icon: "/assets/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -3,21 +3,31 @@ import {
   GetPostsArgs,
   GetPostsResponse,
   GetReadMorePostsResponse,
+  GetTotalPostsResponse,
   SubscribeToNewsletterResponse,
 } from "@/interfaces/requests";
 import { env } from "./env";
-import request, { gql } from "graphql-request";
+import { GraphQLClient, gql } from "graphql-request";
 import { BlogDetailsItem, BlogItem } from "@/interfaces/blog";
 
 const endpoint = env.NEXT_PUBLIC_HASHNODE_ENDPOINT;
 const publicationId = env.NEXT_PUBLIC_HASHNODE_PUBLICATION_ID;
+
+const client = new GraphQLClient(endpoint, {
+  fetch: (url, init) => {
+    return fetch(url, {
+      ...init,
+      cache: "no-store",
+    });
+  },
+});
 
 export const getPosts = async ({
   first,
   pageParam = "",
 }: GetPostsArgs): Promise<BlogItem[]> => {
   const query = gql`
-    query getPosts($publicationId: ObjectId!, $first: Int!, $after: String) {
+    query getPosts_${Date.now()}($publicationId: ObjectId!, $first: Int!, $after: String) {
       publication(id: $publicationId) {
         posts(first: $first, after: $after) {
           edges {
@@ -49,34 +59,39 @@ export const getPosts = async ({
     }
   `;
 
-  const response = await request<GetPostsResponse>(endpoint, query, {
-    publicationId,
-    first,
-    after: pageParam,
-  });
+  try {
+    const response = await client.request<GetPostsResponse>(query, {
+      publicationId,
+      first,
+      after: pageParam,
+    });
 
-  const blogs: BlogItem[] = response.publication.posts.edges.map((edge) => ({
-    id: edge.node.id,
-    slug: edge.node.slug,
-    img: edge.node.coverImage.url,
-    title: edge.node.title,
-    desc: edge.node.content.text.substring(0, 300),
-    content: edge.node.content.markdown,
-    author: edge.node.author.name,
-    publishedAt: edge.node.publishedAt,
-    readTime: edge.node.readTimeInMinutes,
-    series: edge.node.series?.name || "",
-    cursor: edge.cursor,
-  }));
+    const blogs: BlogItem[] = response.publication.posts.edges.map((edge) => ({
+      id: edge.node.id,
+      slug: edge.node.slug,
+      img: edge.node.coverImage?.url || "/assets/blog/default.png",
+      title: edge.node.title,
+      desc: edge.node.content?.text?.substring(0, 300) || "",
+      content: edge.node.content?.markdown || "",
+      author: edge.node.author?.name || "Raman Iyer",
+      publishedAt: edge.node.publishedAt || new Date().toISOString(),
+      readTime: edge.node.readTimeInMinutes || 0,
+      series: edge.node.series?.name || "",
+      cursor: edge.cursor,
+    }));
 
-  return blogs;
+    return blogs;
+  } catch (error) {
+    console.error("Error in getPosts:", error);
+    return [];
+  }
 };
 
 export const getReadMoreSeriesPosts = async (
   seriesSlug: string
 ): Promise<BlogItem[]> => {
   const query = gql`
-    query getReadMoreSeriesPosts(
+    query getReadMoreSeriesPosts_${Date.now()}(
       $publicationId: ObjectId!
       $seriesSlug: String!
     ) {
@@ -113,7 +128,7 @@ export const getReadMoreSeriesPosts = async (
     }
   `;
 
-  const response = await request<GetReadMorePostsResponse>(endpoint, query, {
+  const response = await client.request<GetReadMorePostsResponse>(query, {
     publicationId,
     seriesSlug,
   });
@@ -122,11 +137,11 @@ export const getReadMoreSeriesPosts = async (
     (edge) => ({
       id: edge.node.id,
       slug: edge.node.slug,
-      img: edge.node.coverImage.url,
+      img: edge.node.coverImage?.url || "/assets/blog/default.png",
       title: edge.node.title,
-      desc: edge.node.content.text.substring(0, 300),
-      content: edge.node.content.markdown,
-      author: edge.node.author.name,
+      desc: edge.node.content?.text?.substring(0, 300) || "",
+      content: edge.node.content?.markdown || "",
+      author: edge.node.author?.name || "Raman Iyer",
       publishedAt: edge.node.publishedAt,
       readTime: edge.node.readTimeInMinutes,
       series: edge.node.series?.name || "",
@@ -139,7 +154,7 @@ export const getReadMoreSeriesPosts = async (
 
 export const getReadMorePosts = async (): Promise<BlogItem[]> => {
   const query = gql`
-    query getReadMorePosts($publicationId: ObjectId!) {
+    query getReadMorePosts_${Date.now()}($publicationId: ObjectId!) {
       publication(id: $publicationId) {
         posts(first: 3) {
           edges {
@@ -171,18 +186,18 @@ export const getReadMorePosts = async (): Promise<BlogItem[]> => {
     }
   `;
 
-  const response = await request<GetPostsResponse>(endpoint, query, {
+  const response = await client.request<GetPostsResponse>(query, {
     publicationId,
   });
 
   const blogs: BlogItem[] = response.publication.posts.edges.map((edge) => ({
     id: edge.node.id,
     slug: edge.node.slug,
-    img: edge.node.coverImage.url,
+    img: edge.node.coverImage?.url || "/assets/blog/default.png",
     title: edge.node.title,
-    desc: edge.node.content.text.substring(0, 300),
-    content: edge.node.content.markdown,
-    author: edge.node.author.name,
+    desc: edge.node.content?.text?.substring(0, 300) || "",
+    content: edge.node.content?.markdown || "",
+    author: edge.node.author?.name || "Raman Iyer",
     publishedAt: edge.node.publishedAt,
     readTime: edge.node.readTimeInMinutes,
     series: edge.node.series?.name || "",
@@ -194,7 +209,7 @@ export const getReadMorePosts = async (): Promise<BlogItem[]> => {
 
 export const getPostBySlug = async (slug: string): Promise<BlogDetailsItem> => {
   const query = gql`
-    query getPostBySlug($publicationId: ObjectId!, $slug: String!) {
+    query getPostBySlug_${Date.now()}($publicationId: ObjectId!, $slug: String!) {
       publication(id: $publicationId) {
         post(slug: $slug) {
           id
@@ -221,7 +236,7 @@ export const getPostBySlug = async (slug: string): Promise<BlogDetailsItem> => {
     }
   `;
 
-  const response = await request<GetPostBySlugResponse>(endpoint, query, {
+  const response = await client.request<GetPostBySlugResponse>(query, {
     publicationId,
     slug,
   });
@@ -235,8 +250,8 @@ export const getPostBySlug = async (slug: string): Promise<BlogDetailsItem> => {
     author: post.author.name,
     publishedAt: post.publishedAt,
     readTime: post.readTimeInMinutes,
-    series: post.series.name,
-    seriesSlug: post.series.slug,
+    series: post.series?.name || "",
+    seriesSlug: post.series?.slug || "",
   };
 
   return blog;
@@ -244,7 +259,7 @@ export const getPostBySlug = async (slug: string): Promise<BlogDetailsItem> => {
 
 export const subscribeToNewsletter = async (email: string) => {
   const mutation = gql`
-    mutation subscribeToNewsletter($publicationId: ObjectId!, $email: String!) {
+    mutation subscribeToNewsletter_${Date.now()}($publicationId: ObjectId!, $email: String!) {
       subscribeToNewsletter(
         input: { email: $email, publicationId: $publicationId }
       ) {
@@ -252,8 +267,7 @@ export const subscribeToNewsletter = async (email: string) => {
       }
     }
   `;
-  const response = await request<SubscribeToNewsletterResponse>(
-    endpoint,
+  const response = await client.request<SubscribeToNewsletterResponse>(
     mutation,
     {
       publicationId,
@@ -262,4 +276,21 @@ export const subscribeToNewsletter = async (email: string) => {
   );
 
   return response;
+};
+
+export const getTotalPostsCount = async (): Promise<number> => {
+  const query = gql`
+    query getTotalPostsCount_${Date.now()}($publicationId: ObjectId!) {
+      publication(id: $publicationId) {
+        posts(first: 1) {
+          totalDocuments
+        }
+      }
+    }
+  `;
+
+  const response = await client.request<GetTotalPostsResponse>(query, {
+    publicationId,
+  });
+  return response.publication.posts.totalDocuments;
 };

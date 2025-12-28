@@ -1,9 +1,16 @@
 "use client";
 
 import CountUp from "react-countup";
-import { stats } from "@/constants/data";
+import { stats as initialStats } from "@/constants/data";
 
-const Stats = () => {
+const Stats = ({ totalPosts }: { totalPosts: number }) => {
+  const stats = initialStats.map((stat) => {
+    if (stat.text === "Blogs written") {
+      return { ...stat, num: totalPosts };
+    }
+    return stat;
+  });
+
   return (
     <section className="pt-4 pb-12 xl:pt-0">
       <div className="container mx-auto">
@@ -21,9 +28,8 @@ const Stats = () => {
                   className="text-4xl xl:text-6xl font-extrabold"
                 />
                 <p
-                  className={`${
-                    text.length < 15 ? "max-w-[100px]" : "max-w-[150px]"
-                  } leading-snug text-white/80`}
+                  className={`${text.length < 15 ? "max-w-[100px]" : "max-w-[150px]"
+                    } leading-snug text-white/80`}
                 >
                   {text}
                 </p>

@@ -15,6 +15,12 @@ const Posts = () => {
     initialPageParam: "",
   });
 
+  if (data?.pages[0].length === 0) {
+    return (
+      <h1 className="text-3xl font-bold text-center text-accent">Coming Soon!</h1>
+    )
+  }
+
   return (
     <div>
       <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-8">

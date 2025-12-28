@@ -38,7 +38,7 @@ export const about: About = {
   info: [
     { fieldName: "Name", fieldValue: "Raman Iyer" },
     { fieldName: "Phone", fieldValue: "+919819289445" },
-    { fieldName: "Experience", fieldValue: "8+ Years" },
+    { fieldName: "Experience", fieldValue: "9+ Years" },
     { fieldName: "Skype", fieldValue: "live:raman0801_1" },
     { fieldName: "Nationality", fieldValue: "Indian" },
     { fieldName: "Email", fieldValue: "ramaniyer8195@gmail.com" },
@@ -50,7 +50,7 @@ export const about: About = {
 export const experience: Experience = {
   title: "My experience",
   description:
-    "Explore my 8+ years of experience delivering high-quality, scalable web applications across diverse roles.",
+    "Explore my 9+ years of experience delivering high-quality, scalable web applications across diverse roles.",
   items: [
     {
       company: "Deuex Solutions",
@@ -172,42 +172,18 @@ export const skills: Skills = {
 };
 
 export const projects = [
-  {
-    num: "01",
-    category: "frontend",
-    title: "project 1",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at efficitur tortor.",
-    stack: ["Html 5", "Css 3", "Javascript"],
-    image: "/assets/work/thumb1.png",
-    live: "",
-    github: "",
-    blog: "",
-  },
-  {
-    num: "02",
-    category: "fullstack",
-    title: "project 2",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at efficitur tortor.",
-    stack: ["Next.js", "Tailwind.css", "Node.js"],
-    image: "/assets/work/thumb2.png",
-    live: "",
-    github: "",
-    blog: "",
-  },
-  {
-    num: "03",
-    category: "backend",
-    title: "project 3",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at efficitur tortor.",
-    stack: ["Express.js", "MongoDB", "Node.js"],
-    image: "/assets/work/thumb3.png",
-    live: "",
-    github: "",
-    blog: "",
-  },
+  // {
+  //   num: "01",
+  //   category: "engineering journey",
+  //   title: "engineering journey",
+  //   description:
+  //     "Documenting my engineering journey through real projects, decisions, and lessons learned.",
+  //   stack: ["React", "TypeScript", "Tailwind CSS"],
+  //   image: "/assets/work/thumb1.png",
+  //   live: "",
+  //   github: "",
+  //   blog: "",
+  // },
 ];
 
 export const info = [
@@ -296,7 +272,7 @@ export const shareSocials = [
 
 export const stats = [
   {
-    num: 8,
+    num: 9,
     text: "Years of experience",
   },
   {
@@ -308,7 +284,7 @@ export const stats = [
     text: "Technologies mastered",
   },
   {
-    num: 5,
+    num: 1,
     text: "Blogs written",
   },
 ];

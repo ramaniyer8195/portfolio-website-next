@@ -6,6 +6,8 @@ import {
 import { getPostBySlug } from "@/lib/requests";
 import Post from "@/components/blog/Post";
 
+export const revalidate = 3600;
+
 const BlogDetails = ({ params }: { params: { slug: string } }) => {
   const queryClient = new QueryClient();
 

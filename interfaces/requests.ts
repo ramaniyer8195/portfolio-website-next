@@ -65,3 +65,11 @@ export type GetReadMorePostsResponse = {
     };
   };
 };
+
+export type GetTotalPostsResponse = {
+  publication: {
+    posts: {
+      totalDocuments: number;
+    };
+  };
+};

@@ -7,6 +7,8 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
+export const revalidate = 3600;
+
 const Blog = async () => {
   const queryClient = new QueryClient();
 
