@@ -1,10 +1,20 @@
+"use client";
+
 import { WorkCardImageData } from "@/interfaces/work";
 import Image from "next/image";
 import React from "react";
+import { motion } from "framer-motion";
 
 const WorkCardImage = ({ data }: { data: WorkCardImageData }) => {
   return (
-    <div className="w-full xl:w-[50%]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: 1,
+        transition: { delay: 2, duration: 0.4, ease: "easeIn" },
+      }}
+      className="w-full xl:w-[50%]"
+    >
       <div className="xl:h-[520px] mb-12">
         <div className="w-full">
           <div className="h-[460px] relative group justify-center items-center bg-pink-50/20">
@@ -20,7 +30,7 @@ const WorkCardImage = ({ data }: { data: WorkCardImageData }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

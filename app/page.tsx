@@ -5,8 +5,13 @@ import { FiDownload } from "react-icons/fi";
 import Social from "@/components/home/Social";
 import Photo from "@/components/home/Photo";
 import Stats from "@/components/home/Stats";
+import { getTotalPostsCount } from "@/lib/requests";
 
-const Home = () => {
+export const revalidate = 3600;
+
+const Home = async () => {
+  const totalPosts = await getTotalPostsCount();
+
   return (
     <section className="h-full">
       <div className="container mx-auto h-full">
@@ -18,8 +23,7 @@ const Home = () => {
               <span className="text-accent">Raman Iyer</span>
             </h1>
             <p className="max-w-[500px] mb-9 text-white/80">
-              I am a versatile Full Stack Developer specializing in the MERN
-              stack, building efficient, scalable web applications.
+              I'm a full-stack developer who enjoys building practical, scalable web applications using the MERN stack.
             </p>
 
             <div className="flex flex-col xl:flex-row items-center gap-8">
@@ -46,7 +50,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Stats />
+      <Stats totalPosts={totalPosts} />
     </section>
   );
 };

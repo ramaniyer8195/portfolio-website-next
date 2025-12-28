@@ -1,35 +1,33 @@
-"use client";
-
-import BlogCard from "@/components/blog/BlogCard";
-import { BLOGS } from "@/constants/data";
+import Posts from "@/components/blog/Posts";
 import { BlogItem } from "@/interfaces/blog";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { getPosts } from "@/lib/requests";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-const Blog = () => {
-  const [blogs, setBlogs] = useState<BlogItem[]>([]);
+export const revalidate = 3600;
 
-  useEffect(() => {
-    setBlogs(BLOGS);
-  }, []);
+const Blog = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["blogs"],
+    queryFn: (args) => getPosts({ first: 10, ...args }),
+    getNextPageParam: (lastPage: BlogItem[]) =>
+      lastPage.length < 10 ? undefined : lastPage[lastPage.length - 1].cursor,
+    initialPageParam: "",
+  });
 
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 1,
-        transition: { delay: 2.4, duration: 0.4, ease: "easeIn" },
-      }}
-      className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0"
-    >
+    <section className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-8">
-          {blogs.map((blog, index) => {
-            return <BlogCard key={index} data={blog} />;
-          })}
-        </div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Posts />
+        </HydrationBoundary>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

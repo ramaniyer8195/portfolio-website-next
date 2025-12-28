@@ -1,26 +1,20 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
 import WorkCard from "@/components/work/WorkCard";
 import { projects } from "@/constants/data";
 
 const Work = () => {
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: 1,
-        transition: { delay: 2.4, duration: 0.4, ease: "easeIn" },
-      }}
-      className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0"
-    >
+    <section className="min-h-[80vh] flex flex-col justify-center py-12 xl:px-0">
       <div className="container mx-auto">
-        {projects.map((project, index) => {
-          return <WorkCard key={index} data={project} />;
-        })}
+        {projects.length > 0 ? (
+          projects.map((project, index) => {
+            return <WorkCard key={index} data={project} />;
+          })
+        ) : (
+          <h1 className="text-3xl font-bold text-center text-accent">Coming Soon!</h1>
+        )}
       </div>
-    </motion.section>
+    </section>
   );
 };
 

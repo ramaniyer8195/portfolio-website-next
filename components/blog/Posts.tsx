@@ -1,0 +1,52 @@
+"use client";
+
+import React from "react";
+import BlogCard from "./BlogCard";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getPosts } from "@/lib/requests";
+import { Button } from "../ui/button";
+
+const Posts = () => {
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: ["blogs"],
+    queryFn: (args) => getPosts({ first: 10, ...args }),
+    getNextPageParam: (lastPage) =>
+      lastPage.length < 10 ? undefined : lastPage[lastPage.length - 1].cursor,
+    initialPageParam: "",
+  });
+
+  if (data?.pages[0].length === 0) {
+    return (
+      <h1 className="text-3xl font-bold text-center text-accent">Coming Soon!</h1>
+    )
+  }
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-8">
+        {data?.pages.map((group) =>
+          group.map((blog) => {
+            return <BlogCard key={blog.id} data={blog} />;
+          })
+        )}
+      </div>
+
+      {isFetching ? (
+        <div className="text-accent text-center mt-6">Loading...</div>
+      ) : hasNextPage ? (
+        <div className="flex justify-center mt-6">
+          <Button
+            disabled={!hasNextPage || isFetching}
+            onClick={() => fetchNextPage()}
+          >
+            Load More
+          </Button>
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+};
+
+export default Posts;

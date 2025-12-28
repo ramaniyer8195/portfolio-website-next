@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import PageTransition from "@/components/transition/PageTransition";
 import StairTransition from "@/components/transition/StairTransition";
+import Providers from "@/components/providers/Providers";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -16,6 +17,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Code with Raman",
   description: "Portfolio of Raman, a software developer",
+  icons: {
+    icon: "/assets/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -26,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={jetbrainsMono.variable}>
-        <Header />
-        <StairTransition />
-        <PageTransition>{children}</PageTransition>
+        <Providers>
+          <Header />
+          <StairTransition />
+          <PageTransition>{children}</PageTransition>
+        </Providers>
       </body>
     </html>
   );

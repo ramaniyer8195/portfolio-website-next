@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { sendEmail } from "@/app/actions/sendEmail";
+
 
 const ContactForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -12,15 +14,38 @@ const ContactForm = () => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(firstName, lastName, email, phone, message);
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPhone("");
-    setMessage("");
+    setStatus("loading");
+
+    const formData = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      message,
+    };
+
+    try {
+      const response = await sendEmail(formData);
+      if (response.success) {
+        setStatus("success");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setStatus("error");
+    }
   };
+
 
   return (
     <form
@@ -65,10 +90,22 @@ const ContactForm = () => {
         placeholder="Type your message here."
         onChange={(e) => setMessage(e.target.value)}
       />
-      <Button type="submit" size="md" className="max-w-40">
-        Send message
+      <Button 
+        type="submit" 
+        size="md" 
+        className="max-w-40" 
+        disabled={status === "loading"}
+      >
+        {status === "loading" ? "Sending..." : "Send message"}
       </Button>
+      {status === "success" && (
+        <p className="text-accent">Message sent successfully!</p>
+      )}
+      {status === "error" && (
+        <p className="text-red-500">Failed to send message. Please try again.</p>
+      )}
     </form>
+
   );
 };
 
