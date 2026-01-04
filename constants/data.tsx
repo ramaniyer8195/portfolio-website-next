@@ -172,18 +172,18 @@ export const skills: Skills = {
 };
 
 export const projects = [
-  // {
-  //   num: "01",
-  //   category: "engineering journey",
-  //   title: "engineering journey",
-  //   description:
-  //     "Documenting my engineering journey through real projects, decisions, and lessons learned.",
-  //   stack: ["React", "TypeScript", "Tailwind CSS"],
-  //   image: "/assets/work/thumb1.png",
-  //   live: "",
-  //   github: "",
-  //   blog: "",
-  // },
+  {
+    num: "01",
+    category: "engineering journey",
+    title: "engineering journey",
+    description:
+      "Documenting my engineering journey through real projects, decisions, and lessons learned.",
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+    image: "/assets/work/engineering_journey.png",
+    live: "https://engineering-journey-five.vercel.app/",
+    github: "https://github.com/ramaniyer8195/engineering-journey",
+    blog: "https://www.codewithraman.com/blog/engineering-journey-why-i-started-this-project-and-what-this-series-is-about",
+  },
 ];
 
 export const info = [
